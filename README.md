@@ -58,9 +58,13 @@ The auditors and producers information is kept hidden through all the process th
 
 **AuditableThing:** Purchases
 
+**AuditableThing.assets:** Budget, Invoices, Deliver receipts, etc.
+
 **Producers:** Goverment Purchase Department
 
 **Auditors:** Citizens that can review documentation
+
+**AuditableThing.auditEvidence:** Reconciliation details and observations on audited documents
 
 **Community Members** People in general
 
