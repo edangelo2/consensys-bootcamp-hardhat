@@ -1,5 +1,4 @@
 
-// contracts/AuditResult.sol
 // SPDX-License-Identifier: MIT OR Apache-2.0
 pragma solidity ^0.8.3;
 
@@ -20,8 +19,6 @@ contract AuditResult is ERC721URIStorage {
         dAuditAddress = dAudAddress;
     }
 
-/*
-*/
     event createTokenLog (
         uint256 indexed itemId,
         string indexed tokenURI

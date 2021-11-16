@@ -7,16 +7,15 @@ interface IAuditAssignments {
      * AuditId = TokenId of the AuditItem
      * index = autonumber for the assignment
      */
-    struct AuditAssignmentData {
-        address[] auditors;
-        uint256[] auditResultIds;
-        uint256[] auditorFees;
-        bool[] auditorFeePaid;
-        bool[] auditorResults;
-        uint8[] auditorResultStatus;
-        uint256 auditId;
-        uint256 index;
-    }
+   struct AuditAssignmentData {
+    uint256 index;
+    uint256 auditId;
+    address[] auditors;
+    uint256[] auditResultIds;   
+    uint256[] auditorFees;
+    bool[] auditorFeePaid;
+    bool[] auditorResults;
+  }
 
     function isAuditAssigned(uint256 auditId) external view returns (bool);
 
@@ -30,14 +29,6 @@ interface IAuditAssignments {
         external
         view
         returns (AuditAssignmentData memory);
-
-    function updateauditors(uint256 auditId, address[] memory auditors)
-        external
-        returns (bool success);
-
-    function addAuditor(uint256 auditId, address auditor)
-        external
-        returns (bool success);
 
     function getAuditAssignmentCount() external view returns (uint256 count);
 
@@ -61,7 +52,6 @@ interface IAuditAssignments {
     function updatePayments(
         uint256 auditId,
         uint256[] memory auditorFees,
-        bool[] memory auditorFeePaid,
-        uint8[] memory auditorResultStatus
-    ) external returns (bool success);
+        bool[] memory auditorFeePaid
+    ) external;
 }

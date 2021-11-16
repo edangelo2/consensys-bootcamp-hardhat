@@ -1,4 +1,3 @@
-// contracts/Market.sol
 // SPDX-License-Identifier: MIT OR Apache-2.0
 pragma solidity ^0.8.3;
 
@@ -11,12 +10,12 @@ import "hardhat/console.sol";
 import "./IAuditorAssignments.sol";
 import "./IAuditorEnrollments.sol";
 
-/*
- * DAudit is the smart contract containing the business logic for
- * handling the audit processes.
- * Extends ReentrancyGuard for preventing a contract from calling itself, directly or indirectly.
- * use its modifier  on any functions that calls another smart contract.
- */
+/// @title Decentralized Audit Main Smart Contract with business logic
+/// @author Enrique R. D'Angelo
+/// @notice DAudit is the smart contract containing the business logic for handling the audit processes.
+/// @dev Extends ReentrancyGuard for preventing a contract from calling itself, directly or indirectly. 
+/// Uses nonReentrant modifier on any functions that calls another smart contract.
+/// Uses Safemath to prevent overflow checking
 contract DAudit is ReentrancyGuard {
     using Counters for Counters.Counter;
     using SafeMath for uint256;
@@ -41,8 +40,14 @@ contract DAudit is ReentrancyGuard {
     address payable auditAssignmentsAddr;
 
     // Fee payed by the producers, expressed in ETH because we use the chain token 
-    uint256 listingFee = 0.0025 ether;
+    uint256 listingFee = 0.0020 ether;
 
+    /// @notice DAudit constructor called at deploy time, need to be called with the enrollments and assignments 
+    /// smart contracts addresses
+    /// @dev Make use of Enrollments and Assignments smart contracts which are initialized in the constructor (at deployment time) 
+    /// which may be improved by implementing a registry of smart contracts in future versions. 
+    /// @param _auditEnrollmentsAddr address of the AuditEnrollments smart contract
+    /// @param _auditAssignmentsAddr address of the AuditAssignments smart contract
     constructor(address _auditEnrollmentsAddr, address _auditAssignmentsAddr) {
         // Establishes the owner as the one that deploys the DAudit contract
         owner = payable(msg.sender);
@@ -91,54 +96,6 @@ contract DAudit is ReentrancyGuard {
         uint256 listingFee,
         uint8 auditorReq,
         AuditItemStatus auditItemStatus
-    );
-
-    // 0 = Failed     - Auditor evaluation outcome determined that the audit failed
-    // 1 = Passed     - Auditor evaluation outcome determined that the audit was successful
-    enum AuditResult {
-        Failed,
-        Passed
-    }
-
-    // <enum ResultStatus: AuditPending, InProgress, AuditOk, AuditFailed>
-    // 0 = Pending    - Submittend, payment pending
-    // 1 = Paid      - Auditor has received the payment for his services.-
-    // 2 = Cancelled  - The payment was not done and the audit result will not recieve any payments (review)
-    enum AuditResultStatus {
-        Pending,
-        Paid,
-        Cancelled
-    }
-
-    // Audit Results Information
-    struct AuditResultData {
-        uint256 itemId;
-        address nftContract; // AuditItem NFTcontract
-        uint256 auditItemId; // AuditItem Token Id (review)
-        uint256 tokenIdResult; // Audit Result tokenId
-        address payable auditor; // Address of the auditor (for paying the fee)
-        uint256 auditorFee; // Fee received by auditors for working in the audit of a certain AuditItem
-        AuditResult auditResult; // Failed,Passed (review)
-        AuditResultStatus auditResultStatus; // Pending, Paid, Cancelled (review)
-    }
-
-    // Storage for the AuditResults and their Data
-    mapping(uint256 => AuditResultData) private idToAuditResultData;
-
-    // Audit results submitted by the Auditor
-    event AuditResultCreated(
-        uint256 indexed itemId,
-        uint256 indexed auditItemId, // AuditItem Token Id (review)
-        uint256 indexed tokenIdResult, // Audit Result tokenId
-        AuditResult auditResult // Failed,Passed
-    );
-
-    // Audit services were paid to the Auditor
-    event AuditResultPaid(
-        uint256 indexed itemId,
-        uint256 indexed auditItemId, // AuditItem Token Id (review)
-        uint256 indexed tokenIdResult, // Audit Result tokenId
-        uint256 auditorFee // Fee paid to the auditor
     );
 
     /* Returns the listing fee of the contract */
@@ -461,8 +418,7 @@ contract DAudit is ReentrancyGuard {
 
         // Get the auditFee associated to the AuditItem
         uint256 auditFee = idToAuditItemData[itemId].auditFee;
-
-        // uint tokenId = idToAuditItemData[itemId].tokenId;
+        
         // The caller of this method will be this SmartContract which initially received the
         // auditFee + listing fee
 
@@ -477,7 +433,6 @@ contract DAudit is ReentrancyGuard {
         address[] memory auditors = aData.auditors;
         uint256[] memory auditorFees = aData.auditorFees;
         bool[] memory auditorFeePaid = aData.auditorFeePaid;
-        uint8[] memory auditorResultStatus = aData.auditorResultStatus;
 
         // Validate final result, either all failed or pass the audit
 
@@ -494,9 +449,6 @@ contract DAudit is ReentrancyGuard {
             "All the Audit results must be the same for paying the auditors"
         );
 
-        console.log(auditFee);
-        console.log(auditors.length);
-
         // Calculate Audit Fee for each auditor
         uint256 auditFeeAuditor = auditFee.div(auditors.length);
         console.log(auditFeeAuditor);
@@ -505,13 +457,11 @@ contract DAudit is ReentrancyGuard {
             console.log('pago');
             auditorFees[i] = auditFeeAuditor;
             auditorFeePaid[i] = true;
-            auditorResultStatus[i] = 1; //1=Paid
         }
         AAssignments.updatePayments(
             itemId,
             auditorFees,
-            auditorFeePaid,
-            auditorResultStatus
+            auditorFeePaid
         );
     }
 
@@ -539,4 +489,55 @@ contract DAudit is ReentrancyGuard {
     }
     return items;
   }
+
+    // 0 = Failed     - Auditor evaluation outcome determined that the audit failed
+    // 1 = Passed     - Auditor evaluation outcome determined that the audit was successful
+    enum AuditResult {
+        Failed,
+        Passed
+    }
+
+    // <enum ResultStatus: AuditPending, InProgress, AuditOk, AuditFailed>
+    // 0 = Pending    - Submittend, payment pending
+    // 1 = Paid      - Auditor has received the payment for his services.-
+    // 2 = Cancelled  - The payment was not done and the audit result will not recieve any payments (review)
+    enum AuditResultStatus {
+        Pending,
+        Paid,
+        Cancelled
+    }
+
+    // Audit Results Information
+    struct AuditResultData {
+        uint256 itemId;
+        address nftContract; // AuditItem NFTcontract
+        uint256 auditItemId; // AuditItem Token Id (review)
+        uint256 tokenIdResult; // Audit Result tokenId
+        address payable auditor; // Address of the auditor (for paying the fee)
+        uint256 auditorFee; // Fee received by auditors for working in the audit of a certain AuditItem
+        AuditResult auditResult; // Failed,Passed (review)
+        AuditResultStatus auditResultStatus; // Pending, Paid, Cancelled (review)
+    }
+
+    // Storage for the AuditResults and their Data
+    mapping(uint256 => AuditResultData) private idToAuditResultData;
+
+    // Audit results submitted by the Auditor
+    event AuditResultCreated(
+        uint256 indexed itemId,
+        uint256 indexed auditItemId, // AuditItem Token Id (review)
+        uint256 indexed tokenIdResult, // Audit Result tokenId
+        AuditResult auditResult // Failed,Passed
+    );
+
+    // Audit services were paid to the Auditor
+    event AuditResultPaid(
+        uint256 indexed itemId,
+        uint256 indexed auditItemId, // AuditItem Token Id (review)
+        uint256 indexed tokenIdResult, // Audit Result tokenId
+        uint256 auditorFee // Fee paid to the auditor
+    );
+
 }
+
+

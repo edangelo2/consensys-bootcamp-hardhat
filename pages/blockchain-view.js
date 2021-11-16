@@ -112,8 +112,7 @@ export default function Home() {
         auditResultIds: i.auditResultIds,
         auditorFees: i.auditorFees       ,
         auditorFeePaid: i.auditorFeePaid,
-        auditorResults: i.auditorResults,
-        auditorResultStatus:i.auditorResultStatus
+        auditorResults: i.auditorResults
       }
       console.log(assignment)
       return assignment

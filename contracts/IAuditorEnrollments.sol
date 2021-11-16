@@ -20,7 +20,7 @@ interface IAuditEnrollments {
    */
   function getAuditEnrollment(uint auditId) external view returns (AuditEnrollmentData memory);
   /*
-  * Updates the whole list of auditors assigned to an auditId
+  * Updates the whole list of auditors enrolled to an auditId
   */
   function updateauditors(uint auditId, address[] memory auditors) external returns(bool success);
    /*

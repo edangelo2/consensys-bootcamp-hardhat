@@ -70,7 +70,7 @@ contract AuditEnrollments {
     return auditEnrollments[auditId];
   } 
   /*
-  * Updates the whole list of auditors assigned to an auditId
+  * Updates the whole list of auditors enrolled to an auditId
   */
   function updateauditors(uint auditId, address[] memory auditors) 
     public

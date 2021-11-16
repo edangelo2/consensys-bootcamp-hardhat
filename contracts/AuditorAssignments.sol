@@ -1,29 +1,42 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
 pragma solidity ^0.8.3;
 
+/// @title Auditor Assignments for Decentralized Audits Smart Contracts
+/// @author Enrique R. D'Angelo
+/// @notice Once Auditors are enrolled then DAudit assigns them for performing the audits.
+/// The AuditAssignments Smart Contract encapsulates the logic for persisting the assignments and the assignments results.  
+/// @dev The Smart Contract uses a mapping of Audit Items (tokenId) to AuditAssignmentData Struct with audit results stored y arrays.
+/// Each element of the arrays are assignments storing the auditors (identified by their wallet addresses), audit results 
+/// and payment statuses
+
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "hardhat/console.sol";
 
 contract AuditAssignments {
   using Counters for Counters.Counter;
-  
+
   /* Struct containing informaction of the entity to be stored 
-  * Addresses of assigned auditors
-  * AuditId = TokenId of the AuditItem
-  * index = autonumber for the assignment
+  * index = autonumber for the assignment (primary key)
+  * auditId = TokenId of the AuditItem
+  * auditors = Array containing the addresses of assigned auditors 
+  * auditResultIds = Array containing the Audit Result token Ids of the results submitted by each auditor 
+  * auditorFees = Array with amounts of fees paid to the auditors (in eth)
+  * auditorFeePaid = Array of boolean values indicating whether the auditor was paid or not.
+  * auditorResults = Array of boolean values indicating if the auditor indicated the audit results to Passed (true) or Failed (false)
+  *                   true  = Failed      - Auditor evaluation outcome determined that the audit failed
+  *                   false = Passed      - Auditor evaluation outcome determined that the audit was successful
   */
   struct AuditAssignmentData {
+    uint256 index;
+    uint256 auditId;
     address[] auditors;
     uint256[] auditResultIds;   
     uint256[] auditorFees;
     bool[] auditorFeePaid;
     bool[] auditorResults;
-    uint8[] auditorResultStatus;
-    uint256 auditId;
-    uint256 index;
   }
   
-  /* Mapping of struts uint to AuditAssignmentData where uint is the functional Key = tokenId = auditId */ 
+  /* Mapping of uint to AuditAssignmentData where uint is the functional Key = tokenId = auditId */ 
   mapping(uint => AuditAssignmentData) private auditAssignments;
 
   // Array of AuditItems -> tokenIds stored with Assignment Data (auditors assigned). 
@@ -36,9 +49,10 @@ contract AuditAssignments {
   event LogUpdateAuditResult(uint index, uint indexed auditId, uint auditResultId);
   event LogUpdatePayments(uint index, uint indexed auditId, uint[] auditFee);
 
-/*
-* Returns true if the auditId has assignments
-*/
+  /// @notice Finds if the system has assignments registered for the audit
+  /// @dev Used to check as required for certain functios assuming there is and audit struct already in place
+  /// @param auditId functional key of the audit Item tokenId = auditId
+  /// @return true if the audit has assignments, otherwise returns false
   function isAuditAssigned(uint auditId)
     public 
     view
@@ -47,102 +61,65 @@ contract AuditAssignments {
     if(auditAssignmentIndex.length == 0) return false;
     return (auditAssignmentIndex[auditAssignments[auditId].index] == auditId);
   }
-/*
-* Adds the array of auditors assigned to the audit Id
-*/
+
+  /// @notice Adds a set of auditors to a given audit item
+  /// @dev The (DAudit) uses this method to assign the result of the assignment processes
+  /// @param auditId functional key of the audit Item tokenId = auditId
+  /// @param _auditors array of auditors assigned to be assigned to the audit item
   function insertAuditAssignment(uint auditId, address[] memory _auditors ) public 
   {
+    // Requires that the audit has not been assigned before, once assigned must use update methods to change the state.
     require(!isAuditAssigned(auditId), "Audit Id already exists, must update it");
+
     // Creates the struct on-the-fly associated to the auditId and assigns the array of auditors
     uint size = _auditors.length;
-    
     bool[] memory auditorResults = new bool[](size);
     uint[] memory auditResultIds = new uint[](size);
     uint[] memory auditorFees = new uint[](size);
     bool[] memory auditorFeePaid = new bool[](size);
-    uint8[] memory auditResultStatuses = new uint8[](size);
-    
 
     auditAssignments[auditId].auditors = _auditors;
     auditAssignments[auditId].auditorResults = auditorResults;
     auditAssignments[auditId].auditResultIds = auditResultIds;
     auditAssignments[auditId].auditorFees = auditorFees;
     auditAssignments[auditId].auditorFeePaid = auditorFeePaid;
-    auditAssignments[auditId].auditorResultStatus = auditResultStatuses;
     auditAssignments[auditId].auditId = auditId;
-    auditAssignmentIndex.push(auditId); // Adds the auditId to the list
-    auditAssignments[auditId].index    = _indexCounter.current(); //set the index being added with the autonumber
+
+    // Adds the auditId to the list
+    auditAssignmentIndex.push(auditId); 
+
+    //set the index being added with the autonumber
+    auditAssignments[auditId].index    = _indexCounter.current(); 
     
-    _indexCounter.increment(); // increment the counter since que are adding an item
+    // increment the counter since que are adding an item
+    _indexCounter.increment(); 
     
+    // Emits the event indicating tha a new assignment of auditors was created nby the system
     emit LogNewAuditAssignment(
         auditAssignments[auditId].index,        
         auditId, 
         _auditors);
   }
-  /*
-  * Returns and auditor assignment struct data (list of auditor addresses + index + auditId)
-   */
+  
+  /// @notice Returns and auditor assignments information from a given audit item. 
+  /// @dev raises an exception if the audit is not assigned
+  /// @param auditId functional key of the audit Item tokenId = auditId
+  /// @return AuditAssignmentData - Struct with the Audit Assignment Information 
   function getAuditAssignment(uint auditId)
     public 
     view
     //returns(uint index, address[] memory auditors) 
     returns(AuditAssignmentData memory)
   {
-    require(isAuditAssigned(auditId), "Audit Id does not exist");
+    console.log(auditId) ;
+    //require(isAuditAssigned(auditId), "Audit Id does not exist");
     return auditAssignments[auditId];
   } 
-  /*
-  * Updates the whole list of auditors assigned to an auditId
-  */
-  function updateauditors(uint auditId, address[] memory auditors) 
-    public
-    returns(bool success) 
-  {
-    require(isAuditAssigned(auditId), "Audit Id does not exist");
-    auditAssignments[auditId].auditors = auditors;
-    emit LogUpdateAuditAssignment(
-      auditId, 
-      auditAssignments[auditId].index,
-      auditors);
-    return true;
-  }
-  
-  /*
-  * Adds and auditor to the assigned auditors list
-  */
-  function addAuditor(uint auditId, address auditor) 
-    public
-    returns(bool success) 
-  {
-    require(isAuditAssigned(auditId), "Audit Id does not exist");
-    auditAssignments[auditId].auditors.push(auditor);
-    emit LogAddAssignedAuditor(
-      auditId, 
-      auditAssignments[auditId].index,
-      auditor);
-    return true;
-  }
 
-  function getAuditAssignmentCount() 
-    public
-    view
-    returns(uint count)
-  {
-    return auditAssignmentIndex.length;
-  }
-
-  function getAuditAssignmentAtIndex(uint index)
-    public
-    view
-    returns(uint auditId)
-  {
-    require(isAuditAssigned(auditId), "Audit Id does not exist");
-
-    return auditAssignmentIndex[index];
-  }
-
-  /* Returns true if the auditor (address) is assigned to a given audit Item*/
+  /// @notice Returns true if the auditor (address) is assigned to a given audit Item. 
+  /// @param auditId functional key of the audit Item tokenId = auditId to be checked for assignemnt
+  /// @param auditor address of the auditor to check the assignemnt 
+  /// @return true if the auditor is assigned to the audit item, false if no assigned to the audit item. 
   function isAuditorAssigned(uint auditId, address auditor) 
     public
     view
@@ -155,9 +132,13 @@ contract AuditAssignments {
     }
     return false;/// loop without success then false
   }
-  /*
-  * Updates the outcome of the audit results
-  */
+
+  /// @notice Saves the audit results submitted by the auditor and associate the information to the audit item assignment. 
+  /// @param auditId functional key of the AuditItem tokenId = auditId to be checked for assignemnt
+  /// @param auditResultId functional key of the AuditResult with the results evidence submitted by the auditor (AuditResult tokenId)  
+  /// @param auditor address of the auditor submitting the results 
+  /// @param auditorResult boolean value indicating if the auditor indicated the audit results to Passed (true) or Failed (false)
+  /// @return success = true if the auditor is assigned to the audit item, false if no assigned to the audit item.
   function updateAuditResult(uint auditId, uint auditResultId, address  auditor, bool auditorResult) 
     public
     returns(bool success) 
@@ -177,27 +158,31 @@ contract AuditAssignments {
       return true; 
      }
     }
-    return false;/// loop without success then false
+    // loop without success then false
+    return false; 
   }
 
-  /*
-  * Updates the whole list of auditors assigned to an auditId
-  */
-  function updatePayments(uint auditId, uint256[] memory auditorFees, bool[] memory auditorFeePaid,uint8[] memory auditorResultStatus) 
+  /// @notice Updates the payments done to an Audit Item.
+  /// @dev arrays must be in the same order of the addresses submitted when the audit was assigned 
+  /// @param auditId functional key of the AuditItem tokenId = auditId to update the payments information
+  /// @param auditorFees  - array with the fee paid to each auditor 
+  /// @param auditorFeePaid - array with boolean values indicating the fee was paid to the auditor or not. 
+
+  function updatePayments(uint auditId, uint256[] memory auditorFees, bool[] memory auditorFeePaid) 
     public
-    returns(bool success) 
   {
     require(isAuditAssigned(auditId), "Audit Id does not exist");
     auditAssignments[auditId].auditorFees = auditorFees;
     auditAssignments[auditId].auditorFeePaid = auditorFeePaid;
-    auditAssignments[auditId].auditorResultStatus = auditorResultStatus;
 
     emit LogUpdatePayments(
       auditId, 
       auditAssignments[auditId].index,
       auditorFees);
-    return true;
   }
+
+  /// @notice Retrieves the Audit Assignments.
+  /// @return Array of AuditAssignmentData - Struct with the Audit Assignment Information 
   function fetchAuditAssignments() public view returns (AuditAssignmentData[] memory) {
     uint256 itemCount = _indexCounter.current();
     uint256 currentIndex = 0;
@@ -215,4 +200,25 @@ contract AuditAssignments {
     return items;
     }
 
+  /// @notice Get the number of itemsm stored in the assignments array
+  /// @return count array lenght 
+  function getAuditAssignmentCount() 
+    public
+    view
+    returns(uint count)
+  {
+    return auditAssignmentIndex.length;
+  }
+
+  /// @notice AuditId at a given primary key index
+  /// @return auditId of the Audit Item 
+  function getAuditAssignmentAtIndex(uint index)
+    public
+    view
+    returns(uint auditId)
+  {
+    require(isAuditAssigned(auditId), "Audit Id does not exist");
+
+    return auditAssignmentIndex[index];
+  }
 }
