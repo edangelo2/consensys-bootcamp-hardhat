@@ -166,9 +166,8 @@ contract DAudit is ReentrancyGuard {
         ); // auditItemStatus set to Pending
     }
 
-    /* Returns all pending audit items
-     *  Accessible from the Front End returns a list of AuditItems data
-     */
+    /// @notice Returns audits with status = Pending
+    /// @return Array of AuditItemData
     function fetchPendingAudits() public view returns (AuditItemData[] memory) {
         uint256 itemCount = _itemIds.current();
         uint256 pendingItemsCount = _itemIds.current() -
@@ -192,7 +191,8 @@ contract DAudit is ReentrancyGuard {
         }
         return items;
     }
-
+    /// @notice Returns all audits submitted to DAudit system
+    /// @return Array of AuditItemData
     function fetchAudits() public view returns (AuditItemData[] memory) {
         uint256 itemCount = _itemIds.current();
         uint256 currentIndex = 0;
@@ -210,7 +210,9 @@ contract DAudit is ReentrancyGuard {
         return items;
     }
 
-    /* Returns only items from the producer */
+    /// @notice Returns all audits submitted to DAudit system for a given producer (msg.sender)
+    /// @dev the producer parameter is obtained from the message sender
+    /// @return Array of AuditItemData
     function fetchItemsProducer() public view returns (AuditItemData[] memory) {
         uint256 totalItemCount = _itemIds.current();
         uint256 itemCount = 0;
@@ -236,7 +238,8 @@ contract DAudit is ReentrancyGuard {
         return items;
     }
 
-    /* Returns Audit Item by TokenId   */
+    /// @notice Returns Audit Item by TokenId
+    /// @return AuditItemData structure with audit item information 
     function fetchAuditByTokenId(uint256 tokenId)
         public
         view
@@ -245,7 +248,8 @@ contract DAudit is ReentrancyGuard {
         return idToAuditItemData[tokenId];
     }
 
-    /* Returns the numbers of auditors required for an AuditItem   */
+    /// @notice Returns the numbers of auditors required for an AuditItem   
+    /// @return auditorReq number of auditors required to complete the audit 
     function getAuditorsRequiredForAudit(uint256 tokenId)
         public
         view
@@ -254,6 +258,11 @@ contract DAudit is ReentrancyGuard {
         return idToAuditItemData[tokenId].auditorReq;
     }
 
+    /// @notice Adds an auditor to the list of auditors enrolled for performing the audit
+    /// @dev calls the AuditEnrollments smart contract associated to DAudit
+    /// @param auditId TokenId of the Audit Item which auditor wants to be enrolled
+    /// @param auditor address of the auditor who wants to be enrolled
+    
     function enrollAuditor(uint256 auditId, address auditor) public payable nonReentrant {
         // Get Audit Item Data
         AuditItemData memory item = idToAuditItemData[auditId];
@@ -351,7 +360,7 @@ contract DAudit is ReentrancyGuard {
         return false;
     }
 
-    /* Only allows assigned auditors to submit audit results */
+    /// @notice Only allows assigned auditors to submit audit results 
     modifier onlyAssignedAuditors(uint256 auditItemId) {
         IAuditAssignments AAssignments = IAuditAssignments(
             auditAssignmentsAddr
@@ -362,7 +371,7 @@ contract DAudit is ReentrancyGuard {
         );
         _;
     }
-    /* Only Allows the owner of the smart contract to execute certain functions */
+    /// @notice Only Allows the owner of the smart contract to execute certain functions
     modifier onlyOwner() {
         require(owner == msg.sender, "Ownable: caller is not the owner");
         _;

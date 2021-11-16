@@ -97,7 +97,8 @@ export default function EnrollAuditor() {
     const transaction3 = await contract3.enrollAuditor(id,signerAddress,{value:'0'})
 
     const trxR = await transaction3.wait()
-    // console.log(trxR)
+    console.log(trxR)
+    
     loadAuditItems()
   }
   
