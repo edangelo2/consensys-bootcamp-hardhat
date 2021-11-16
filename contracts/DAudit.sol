@@ -55,17 +55,17 @@ contract DAudit is ReentrancyGuard {
         auditAssignmentsAddr = payable(_auditAssignmentsAddr);
     }
 
-    // Audit Information
+    /// Audit Information
     struct AuditItemData {
-        uint256 itemId;
-        address nftContract;
-        uint256 tokenId;
-        address payable producer;
-        address payable owner;
-        uint256 auditFee;
-        uint256 listingFee;
-        uint8 auditorReq;
-        AuditItemStatus auditItemStatus;
+        uint256 itemId;                     // Autonumber primary key of data structure       
+        address nftContract;                // Nft Contract Address of the Audit Item
+        uint256 tokenId;                    // Nft TokenId of the Audit Item
+        address payable producer;           // Address of the person producing the audit and requiring to be auditted
+        address payable owner;              // Owner of the Audit Item (can be the DAudit owner or the producer once audit is finished)
+        uint256 auditFee;                   // Fee payed by the producer to the auditors
+        uint256 listingFee;                 // Fee charged by the smart contract which covers expenses and commissions
+        uint8 auditorReq;                   // Number of auditors required to complete the audit
+        AuditItemStatus auditItemStatus;    // Status of the Audit Items in terms of progress of the audit activities (see below)
     }
 
     // <enum Status: AuditPending, InProgress, AuditOk, AuditFailed>
@@ -82,7 +82,7 @@ contract DAudit is ReentrancyGuard {
         Cancelled
     }
 
-    // Storage for the AuditItems and their Data
+    // Storage for the AuditItems and their Data, maps the tokenId of the AuditItem (NFT) to the AuditItemData 
     mapping(uint256 => AuditItemData) private idToAuditItemData;
 
     // Event to emit Audit Items being created, can listen them from tests and front end apps
@@ -98,12 +98,24 @@ contract DAudit is ReentrancyGuard {
         AuditItemStatus auditItemStatus
     );
 
-    /* Returns the listing fee of the contract */
+    /// @notice Query the listing fee currently set up for the contract
+    /// @return listing fee storage variable with the configuration of the listing fee 
     function getListingFee() public view returns (uint256) {
         return listingFee;
     }
 
-    /* Creates an auditItem and sets it available on the distributed audit system */
+    /// @notice Query the listing fee currently set up for the contract
+    /// @param _listingFee fee charged for listing an audit item
+    /// @dev updates the listing fee storage variable with the configuration of the listing fee 
+    function setListingFeeu(uint256 _listingFee ) public onlyOwner {
+        listingFee = _listingFee;
+    }
+
+    /// @notice Creates an auditItem and sets it available on the descentralized audit system
+    /// @param nftContract Nft Contract Address of the Audit Item
+    /// @param tokenId Nft TokenId of the Audit Item
+    /// @param auditFee Fee payed by the producer to the auditors
+    /// @param auditorsReq Number of auditors required to complete the audit
     function createAuditItem(
         address nftContract,
         uint256 tokenId,
