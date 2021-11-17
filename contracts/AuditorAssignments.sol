@@ -15,7 +15,7 @@ import "hardhat/console.sol";
 contract AuditAssignments {
   using Counters for Counters.Counter;
 
-  /* Struct containing informaction of the entity to be stored 
+  /* Struct containing information of the entity to be stored 
   * index = autonumber for the assignment (primary key)
   * auditId = TokenId of the AuditItem
   * auditors = Array containing the addresses of assigned auditors 
@@ -65,7 +65,7 @@ contract AuditAssignments {
   /// @notice Adds a set of auditors to a given audit item
   /// @dev The (DAudit) uses this method to assign the result of the assignment processes
   /// @param auditId functional key of the audit Item tokenId = auditId
-  /// @param _auditors array of auditors assigned to be assigned to the audit item
+  /// @param _auditors array of auditors to be assigned to the audit item
   function insertAuditAssignment(uint auditId, address[] memory _auditors ) public 
   {
     // Requires that the audit has not been assigned before, once assigned must use update methods to change the state.
@@ -210,7 +210,7 @@ contract AuditAssignments {
     return auditAssignmentIndex.length;
   }
 
-  /// @notice AuditId at a given primary key index
+  /// @notice Returns the AuditId assigned at a given primary key index
   /// @return auditId of the Audit Item 
   function getAuditAssignmentAtIndex(uint index)
     public

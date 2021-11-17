@@ -8,6 +8,11 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 import "hardhat/console.sol";
 
+/// @title Audit Results NFT tokens representing the Results information and evidence sumbitted by the auditors 
+/// in the Decentralized Audits system
+/// @author Enrique R. D'Angelo
+/// @dev Extends the oppenzeppelin ERC721URIStorage implementation
+
 contract AuditResult is ERC721URIStorage {
     using Counters for Counters.Counter;
     // Unique identifier for Audit Items (Tokens)
@@ -15,11 +20,13 @@ contract AuditResult is ERC721URIStorage {
     // Address of the Audit Item Proxy with Audit Logic
     address dAuditAddress;
 
+    /// @notice Constructor of the smart contract
+    /// @param dAudAddress Address of the DAudit Item Proxy with Audit Logic    
     constructor(address dAudAddress) ERC721("Daudit Result Tokens", "DAUDR") {
         dAuditAddress = dAudAddress;
     }
-
-    event createTokenLog (
+    /// Event emitted when creating the Audit Items tokens
+    event createAuditResultLog (
         uint256 indexed itemId,
         string indexed tokenURI
     );
@@ -39,7 +46,7 @@ contract AuditResult is ERC721URIStorage {
         // Grant access to the DAudit contract to transfer the token to different users
         setApprovalForAll(dAuditAddress, true);
 
-        emit createTokenLog(newItemId,tokenURI);
+        emit createAuditResultLog(newItemId,tokenURI);
 
         // Return the tokenId
         return newItemId;

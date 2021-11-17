@@ -476,6 +476,12 @@ contract DAudit is ReentrancyGuard {
             auditorFees,
             auditorFeePaid
         );
+
+        // Update the AuditItem Status
+        if(resultFinal)
+            idToAuditItemData[auditId].auditItemStatus = AuditItemStatus.Passed;
+        else
+            idToAuditItemData[auditId].auditItemStatus = AuditItemStatus.Failed;
     }
     /// @notice Returns only items that are associated to the producer */
     function fetchMyAudits() public view returns (AuditItemData[] memory) {
