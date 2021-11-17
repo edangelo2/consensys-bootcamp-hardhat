@@ -25,11 +25,6 @@ contract DAudit is ReentrancyGuard {
     // Number of AuditItems pending
     Counters.Counter private _itemsPending;
 
-    // Number of AuditResults submitted
-    Counters.Counter private _resultIds;
-    // Number of AuditItems pending
-    Counters.Counter private _resultsPending;
-
     // Address of the Audit System owner to collect admin fees
     address payable owner;
 
@@ -107,7 +102,7 @@ contract DAudit is ReentrancyGuard {
     /// @notice Query the listing fee currently set up for the contract
     /// @param _listingFee fee charged for listing an audit item
     /// @dev updates the listing fee storage variable with the configuration of the listing fee 
-    function setListingFeeu(uint256 _listingFee ) public onlyOwner {
+    function setListingFee(uint256 _listingFee ) public onlyOwner {
         listingFee = _listingFee;
     }
 
@@ -139,7 +134,7 @@ contract DAudit is ReentrancyGuard {
             nftContract, // parameter from the FrontEnd or function caller
             tokenId, // parameter from the FrontEnd or function caller
             payable(msg.sender), // the sender of the transaction is the "producer" of the auditItem
-            payable(address(0)), // owner of the audit item is no-one (review)
+            payable(address(0)), // owner of the audit item is no-one
             auditFee, // parameters auditFee provided by the producer that will be distributed to the auditors
             listingFee, // current listing fee that will remain as a residual in the contract
             auditorsReq,
@@ -158,7 +153,7 @@ contract DAudit is ReentrancyGuard {
             nftContract,
             tokenId,
             msg.sender,
-            address(0), // owner of the audit item is no-one (review)
+            address(0), // owner of the audit item is no-one 
             auditFee,
             listingFee,
             auditorsReq,
@@ -262,7 +257,6 @@ contract DAudit is ReentrancyGuard {
     /// @dev calls the AuditEnrollments smart contract associated to DAudit
     /// @param auditId TokenId of the Audit Item which auditor wants to be enrolled
     /// @param auditor address of the auditor who wants to be enrolled
-    
     function enrollAuditor(uint256 auditId, address auditor) public payable nonReentrant {
         // Get Audit Item Data
         AuditItemData memory item = idToAuditItemData[auditId];
@@ -274,16 +268,20 @@ contract DAudit is ReentrancyGuard {
         AEnrollments.addAuditor(auditId, auditor);
     }
 
-   function assignAuditors(uint256 tokenId) public payable nonReentrant onlyOwner {
+    /// @notice Assigns the auditors required for the audit processes from the enrolled ones
+    /// @dev calls the AuditEnrollments and AuditAssignments smart contract associated to DAudit
+    /// Random numbers won't be succeptible to any fraud if manipulated so we keep it simple and based on the block.timestamp
+    /// @param auditId TokenId of the Audit Item which auditors wants to be assigned 
+   function assignAuditors(uint256 auditId) public payable nonReentrant onlyOwner {
         // Get Audit Item Data
-        AuditItemData memory item = idToAuditItemData[tokenId];
+        AuditItemData memory item = idToAuditItemData[auditId];
 
         // get the list of auditors enrolled for auditing the auditItem (tokenId)
         IAuditEnrollments AEnrollments = IAuditEnrollments(
             auditEnrollmentsAddr
         );
         address[] memory auditorsEnrollArray = AEnrollments
-            .getAuditEnrollment(tokenId)
+            .getAuditEnrollment(auditId)
             .auditors;
 
         // auditors enrolled (itemCount) must be greater or equal to item.auditorReq
@@ -326,14 +324,17 @@ contract DAudit is ReentrancyGuard {
         IAuditAssignments AAssignments = IAuditAssignments(
             auditAssignmentsAddr
         );
-        AAssignments.insertAuditAssignment(tokenId, auditorsAssigned);
+        AAssignments.insertAuditAssignment(auditId, auditorsAssigned);
 
         // emit the event
 
         // mark AuditItem to be inProgress
-        idToAuditItemData[tokenId].auditItemStatus = AuditItemStatus.InProgress;
+        idToAuditItemData[auditId].auditItemStatus = AuditItemStatus.InProgress;
     }
 
+    /// @notice Internal function for generating a random number based on block.timestamp
+    /// @param _modulus  random number probability ()
+    /// @param randNonce seed
     function randMod(uint256 _modulus, uint256 randNonce)
         internal
         view
@@ -347,6 +348,11 @@ contract DAudit is ReentrancyGuard {
             ) % _modulus;
     }
 
+
+    /// @notice Internal function for generating a random number based on block.timestamp
+    /// @param arrayOfAddresses  array of addresses where to find if address exists
+    /// @param findAddress address to be found
+    /// @param l iterate array until element number l
     function isAddressInArray(
         address[] memory arrayOfAddresses,
         address findAddress,
@@ -360,7 +366,8 @@ contract DAudit is ReentrancyGuard {
         return false;
     }
 
-    /// @notice Only allows assigned auditors to submit audit results 
+    /// @notice Only allows assigned auditors to submit audit results
+    /// @param  auditItemId audit item id to be checked
     modifier onlyAssignedAuditors(uint256 auditItemId) {
         IAuditAssignments AAssignments = IAuditAssignments(
             auditAssignmentsAddr
@@ -377,31 +384,18 @@ contract DAudit is ReentrancyGuard {
         _;
     }
 
-    /* Creates an Audit Result and sets it available on the distributed audit system
-     *  Anly assigned auditors can submit audit results
-     */
+    /// @notice Creates an Audit Result and sets it available on the distributed audit system
+    ///  Anly assigned auditors can submit audit results
+    /// @param nftContract Address of the AuditItem NFT contract
+    /// @param auditItemId TokenId of the AuditItem
+    /// @param tokenIdResult TokenId of the AuditResult
+    /// @param auditResult AuditResult.Passed or AuditResult.Failed
     function createAuditResult(
         address nftContract,
         uint256 auditItemId,
         uint256 tokenIdResult,
         AuditResult auditResult
     ) public payable onlyAssignedAuditors(auditItemId) nonReentrant {
-        // We are creating a new Item, so we increment the itemIds counter and assign it to a new id in the list
-        _resultIds.increment();
-        uint256 resultId = _resultIds.current();
-
-        // Populate the AuditResults data (populate may be eliminated and stored in the assignment)
-
-        idToAuditResultData[resultId] = AuditResultData(
-            resultId, // autoincremented in this function
-            nftContract, // parameter from the FrontEnd or function caller (of the auditResult review)
-            auditItemId, // parameter from the FrontEnd or function caller
-            tokenIdResult, // TokenId of the AuditResult minted before with the audit results file
-            payable(msg.sender), // the sender of the transaction is the "auditor" of the auditItem
-            0, // auditorFee is zero, will updated in the payment proccess
-            auditResult,
-            AuditResultStatus.Pending
-        ); // auditItemStatus set to Pending
 
         IAuditAssignments AAssignments = IAuditAssignments(
             auditAssignmentsAddr
@@ -424,21 +418,20 @@ contract DAudit is ReentrancyGuard {
 
         // Audit results submitted by the Auditor
         emit AuditResultCreated(
-            resultId,
-            auditItemId, // AuditItem Token Id (review)
+            auditItemId, // AuditItem Token Id 
             tokenIdResult, // Audit Result tokenId
             auditResult // Failed,Passed
         );
     }
 
-    /* Function triggered from the DAudit Smart Contract to pay the auditors */
-    /* Transfers ownership of the item, as well as funds between parties */
-    /*address nftContract */
-    function payAuditors(uint256 itemId) public payable nonReentrant onlyOwner {
+    /// @notice Function triggered from the DAudit Smart Contract to pay the auditors 
+    /// Transfers ownership of the item, as well as funds between auditors who participated in the audit 
+    /// @param auditId token Id of the audit item 
+    function payAuditors(uint256 auditId) public payable nonReentrant onlyOwner {
         // This function can only be called by the owner of the smart contract. 
 
         // Get the auditFee associated to the AuditItem
-        uint256 auditFee = idToAuditItemData[itemId].auditFee;
+        uint256 auditFee = idToAuditItemData[auditId].auditFee;
         
         // The caller of this method will be this SmartContract which initially received the
         // auditFee + listing fee
@@ -448,7 +441,7 @@ contract DAudit is ReentrancyGuard {
             auditAssignmentsAddr
         );
         IAuditAssignments.AuditAssignmentData memory aData = AAssignments
-            .getAuditAssignment(itemId);
+            .getAuditAssignment(auditId);
 
         bool[] memory results = aData.auditorResults;
         address[] memory auditors = aData.auditors;
@@ -474,42 +467,40 @@ contract DAudit is ReentrancyGuard {
         uint256 auditFeeAuditor = auditFee.div(auditors.length);
         console.log(auditFeeAuditor);
         for (uint256 i = 0; i < auditors.length; i++) {
-            payable(auditors[i]).transfer(auditFeeAuditor); // review use of transfer  
-            console.log('pago');
+            payable(auditors[i]).transfer(auditFeeAuditor); 
             auditorFees[i] = auditFeeAuditor;
             auditorFeePaid[i] = true;
         }
         AAssignments.updatePayments(
-            itemId,
+            auditId,
             auditorFees,
             auditorFeePaid
         );
     }
+    /// @notice Returns only items that are associated to the producer */
+    function fetchMyAudits() public view returns (AuditItemData[] memory) {
+        uint totalItemCount = _itemIds.current();
+        uint itemCount = 0;
+        uint currentIndex = 0;
 
-    /* Returns only items that are associated to the producer */
-  function fetchMyAudits() public view returns (AuditItemData[] memory) {
-    uint totalItemCount = _itemIds.current();
-    uint itemCount = 0;
-    uint currentIndex = 0;
-
-    // Iterates the list of Audit Items and counts for the total assigned to the auditor
-    for (uint i = 0; i < totalItemCount; i++) {
-      if (idToAuditItemData[i + 1].producer == msg.sender) {
-        itemCount += 1;
-      }
+        // Iterates the list of Audit Items and counts for the total assigned to the auditor
+        for (uint i = 0; i < totalItemCount; i++) {
+        if (idToAuditItemData[i + 1].producer == msg.sender) {
+            itemCount += 1;
+        }
+        }
+        // Creates a fixed length array to return the AudtiItemData with owner == msg.sender
+        AuditItemData[] memory items = new AuditItemData[](itemCount);
+        for (uint i = 0; i < totalItemCount; i++) {
+        if (idToAuditItemData[i + 1].producer == msg.sender) {
+            uint currentId =  i + 1;
+            AuditItemData storage currentItem = idToAuditItemData[currentId];
+            items[currentIndex] = currentItem;
+            currentIndex += 1;
+        }
+        }
+        return items;
     }
-    // Creates a fixed length array to return the AudtiItemData with owner == msg.sender
-    AuditItemData[] memory items = new AuditItemData[](itemCount);
-    for (uint i = 0; i < totalItemCount; i++) {
-      if (idToAuditItemData[i + 1].producer == msg.sender) {
-        uint currentId =  i + 1;
-        AuditItemData storage currentItem = idToAuditItemData[currentId];
-        items[currentIndex] = currentItem;
-        currentIndex += 1;
-      }
-    }
-    return items;
-  }
 
     // 0 = Failed     - Auditor evaluation outcome determined that the audit failed
     // 1 = Passed     - Auditor evaluation outcome determined that the audit was successful
@@ -518,43 +509,17 @@ contract DAudit is ReentrancyGuard {
         Passed
     }
 
-    // <enum ResultStatus: AuditPending, InProgress, AuditOk, AuditFailed>
-    // 0 = Pending    - Submittend, payment pending
-    // 1 = Paid      - Auditor has received the payment for his services.-
-    // 2 = Cancelled  - The payment was not done and the audit result will not recieve any payments (review)
-    enum AuditResultStatus {
-        Pending,
-        Paid,
-        Cancelled
-    }
-
-    // Audit Results Information
-    struct AuditResultData {
-        uint256 itemId;
-        address nftContract; // AuditItem NFTcontract
-        uint256 auditItemId; // AuditItem Token Id (review)
-        uint256 tokenIdResult; // Audit Result tokenId
-        address payable auditor; // Address of the auditor (for paying the fee)
-        uint256 auditorFee; // Fee received by auditors for working in the audit of a certain AuditItem
-        AuditResult auditResult; // Failed,Passed (review)
-        AuditResultStatus auditResultStatus; // Pending, Paid, Cancelled (review)
-    }
-
-    // Storage for the AuditResults and their Data
-    mapping(uint256 => AuditResultData) private idToAuditResultData;
-
     // Audit results submitted by the Auditor
     event AuditResultCreated(
-        uint256 indexed itemId,
-        uint256 indexed auditItemId, // AuditItem Token Id (review)
+        uint256 indexed auditItemId, // AuditItem Token Id
         uint256 indexed tokenIdResult, // Audit Result tokenId
         AuditResult auditResult // Failed,Passed
     );
 
     // Audit services were paid to the Auditor
     event AuditResultPaid(
-        uint256 indexed itemId,
-        uint256 indexed auditItemId, // AuditItem Token Id (review)
+        uint256 indexed auditId,
+        uint256 indexed auditItemId, // AuditItem Token Id 
         uint256 indexed tokenIdResult, // Audit Result tokenId
         uint256 auditorFee // Fee paid to the auditor
     );

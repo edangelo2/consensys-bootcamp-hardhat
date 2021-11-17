@@ -36,7 +36,7 @@ contract AuditResult is ERC721URIStorage {
         // Both functions inherited from ERC721URIStorage.sol
         _setTokenURI(newItemId, tokenURI);
 
-        // Grant access to the DAudit contract to transfer the token to different users (review)
+        // Grant access to the DAudit contract to transfer the token to different users
         setApprovalForAll(dAuditAddress, true);
 
         emit createTokenLog(newItemId,tokenURI);
