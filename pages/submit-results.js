@@ -86,7 +86,8 @@ useEffect(() => {
 
   async function loadAuditItems() {
 
-    const provider = new ethers.providers.JsonRpcProvider()
+    //const provider = new ethers.providers.JsonRpcProvider()
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider)
     const auditItemContract = new ethers.Contract(auditItemAddress, AuditItem.abi, provider)
     const DAuditContract = new ethers.Contract(DAuditaddress, DAudit.abi, provider)
 

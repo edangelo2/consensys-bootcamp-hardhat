@@ -39,7 +39,8 @@ export default function Home() {
   }, [])
   async function loadAuditItems() {
     /* create a generic provider and query for pending audit items */
-    const provider = new ethers.providers.JsonRpcProvider()
+    // const provider = new ethers.providers.JsonRpcProvider()
+    const provider = new ethers.providers.Web3Provider(web3.currentProvider)
     const auditItemContract = new ethers.Contract(auditItemAddress, AuditItem.abi, provider)
     const DAuditContract = new ethers.Contract(DAuditaddress, DAudit.abi, provider)
     const data = await DAuditContract.fetchAudits()
