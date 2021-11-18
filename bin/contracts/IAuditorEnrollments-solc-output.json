@@ -1,0 +1,914 @@
+{
+    "contracts": {
+        "/Users/enriquerafaeldangelo/consensys/blockchain-developer-bootcamp-final-project/contracts/IAuditorEnrollments.sol": {
+            "IAuditEnrollments": {
+                "abi": [
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "uint256",
+                                "name": "auditId",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address",
+                                "name": "auditor",
+                                "type": "address"
+                            }
+                        ],
+                        "name": "addAuditor",
+                        "outputs": [
+                            {
+                                "internalType": "bool",
+                                "name": "success",
+                                "type": "bool"
+                            }
+                        ],
+                        "stateMutability": "nonpayable",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "uint256",
+                                "name": "auditId",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "getAuditEnrollment",
+                        "outputs": [
+                            {
+                                "components": [
+                                    {
+                                        "internalType": "address[]",
+                                        "name": "auditors",
+                                        "type": "address[]"
+                                    },
+                                    {
+                                        "internalType": "uint256",
+                                        "name": "auditId",
+                                        "type": "uint256"
+                                    },
+                                    {
+                                        "internalType": "uint256",
+                                        "name": "index",
+                                        "type": "uint256"
+                                    }
+                                ],
+                                "internalType": "struct IAuditEnrollments.AuditEnrollmentData",
+                                "name": "",
+                                "type": "tuple"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "uint256",
+                                "name": "auditId",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address[]",
+                                "name": "auditors",
+                                "type": "address[]"
+                            }
+                        ],
+                        "name": "insertAuditEnrollment",
+                        "outputs": [],
+                        "stateMutability": "nonpayable",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "uint256",
+                                "name": "auditId",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "isAuditEnrolled",
+                        "outputs": [
+                            {
+                                "internalType": "bool",
+                                "name": "",
+                                "type": "bool"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "uint256",
+                                "name": "auditId",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "address[]",
+                                "name": "auditors",
+                                "type": "address[]"
+                            }
+                        ],
+                        "name": "updateauditors",
+                        "outputs": [
+                            {
+                                "internalType": "bool",
+                                "name": "success",
+                                "type": "bool"
+                            }
+                        ],
+                        "stateMutability": "nonpayable",
+                        "type": "function"
+                    }
+                ],
+                "devdoc": {
+                    "author": "Enrique R. D'Angelo",
+                    "kind": "dev",
+                    "methods": {
+                        "addAuditor(uint256,address)": {
+                            "params": {
+                                "auditId": "functional key of the audit Item tokenId = auditId",
+                                "auditor": "address of the auditor being added to the audit enrollments  "
+                            },
+                            "returns": {
+                                "success": "true the systme was able to add the auditor to the audit enrollments, otherwise returns false"
+                            }
+                        },
+                        "getAuditEnrollment(uint256)": {
+                            "params": {
+                                "auditId": "functional key of the audit Item tokenId = auditId"
+                            }
+                        },
+                        "insertAuditEnrollment(uint256,address[])": {
+                            "params": {
+                                "auditId": "functional key of the audit Item tokenId = auditId",
+                                "auditors": "array of auditors enrolled to the audit item"
+                            }
+                        },
+                        "isAuditEnrolled(uint256)": {
+                            "details": "Used to check as required for certain functions assuming there is and enrollment struct already in place",
+                            "params": {
+                                "auditId": "functional key of the audit Item tokenId = auditId"
+                            },
+                            "returns": {
+                                "_0": "true if the audit has enrollments, otherwise returns false "
+                            }
+                        },
+                        "updateauditors(uint256,address[])": {
+                            "params": {
+                                "auditId": "functional key of the audit Item tokenId = auditId"
+                            },
+                            "returns": {
+                                "success": "true the systme was able to update the audit enrollments, otherwise returns false"
+                            }
+                        }
+                    },
+                    "title": "Auditor Enrollments Interface",
+                    "version": 1
+                },
+                "evm": {
+                    "bytecode": {
+                        "functionDebugData": {},
+                        "generatedSources": [],
+                        "linkReferences": {},
+                        "object": "",
+                        "opcodes": "",
+                        "sourceMap": ""
+                    },
+                    "deployedBytecode": {
+                        "functionDebugData": {},
+                        "generatedSources": [],
+                        "immutableReferences": {},
+                        "linkReferences": {},
+                        "object": "",
+                        "opcodes": "",
+                        "sourceMap": ""
+                    },
+                    "gasEstimates": null,
+                    "methodIdentifiers": {
+                        "addAuditor(uint256,address)": "afa6255e",
+                        "getAuditEnrollment(uint256)": "b9e309c1",
+                        "insertAuditEnrollment(uint256,address[])": "0e601b4f",
+                        "isAuditEnrolled(uint256)": "3351f910",
+                        "updateauditors(uint256,address[])": "86ed4106"
+                    }
+                },
+                "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"auditId\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"auditor\",\"type\":\"address\"}],\"name\":\"addAuditor\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"auditId\",\"type\":\"uint256\"}],\"name\":\"getAuditEnrollment\",\"outputs\":[{\"components\":[{\"internalType\":\"address[]\",\"name\":\"auditors\",\"type\":\"address[]\"},{\"internalType\":\"uint256\",\"name\":\"auditId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"internalType\":\"struct IAuditEnrollments.AuditEnrollmentData\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"auditId\",\"type\":\"uint256\"},{\"internalType\":\"address[]\",\"name\":\"auditors\",\"type\":\"address[]\"}],\"name\":\"insertAuditEnrollment\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"auditId\",\"type\":\"uint256\"}],\"name\":\"isAuditEnrolled\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"auditId\",\"type\":\"uint256\"},{\"internalType\":\"address[]\",\"name\":\"auditors\",\"type\":\"address[]\"}],\"name\":\"updateauditors\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"success\",\"type\":\"bool\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Enrique R. D'Angelo\",\"kind\":\"dev\",\"methods\":{\"addAuditor(uint256,address)\":{\"params\":{\"auditId\":\"functional key of the audit Item tokenId = auditId\",\"auditor\":\"address of the auditor being added to the audit enrollments  \"},\"returns\":{\"success\":\"true the systme was able to add the auditor to the audit enrollments, otherwise returns false\"}},\"getAuditEnrollment(uint256)\":{\"params\":{\"auditId\":\"functional key of the audit Item tokenId = auditId\"}},\"insertAuditEnrollment(uint256,address[])\":{\"params\":{\"auditId\":\"functional key of the audit Item tokenId = auditId\",\"auditors\":\"array of auditors enrolled to the audit item\"}},\"isAuditEnrolled(uint256)\":{\"details\":\"Used to check as required for certain functions assuming there is and enrollment struct already in place\",\"params\":{\"auditId\":\"functional key of the audit Item tokenId = auditId\"},\"returns\":{\"_0\":\"true if the audit has enrollments, otherwise returns false \"}},\"updateauditors(uint256,address[])\":{\"params\":{\"auditId\":\"functional key of the audit Item tokenId = auditId\"},\"returns\":{\"success\":\"true the systme was able to update the audit enrollments, otherwise returns false\"}}},\"title\":\"Auditor Enrollments Interface\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"addAuditor(uint256,address)\":{\"notice\":\"Adds an auditor to the enrolled auditors list\"},\"getAuditEnrollment(uint256)\":{\"notice\":\"Returns and auditor enrollment struct data for a give auditId\"},\"insertAuditEnrollment(uint256,address[])\":{\"notice\":\"Adds a set of auditors enrolled to a given audit item\"},\"isAuditEnrolled(uint256)\":{\"notice\":\"Finds if the system has enrollments registered for the audit item\"},\"updateauditors(uint256,address[])\":{\"notice\":\"Updates the whole list of auditors enrolled to an auditId\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"/Users/enriquerafaeldangelo/consensys/blockchain-developer-bootcamp-final-project/contracts/IAuditorEnrollments.sol\":\"IAuditEnrollments\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/enriquerafaeldangelo/consensys/blockchain-developer-bootcamp-final-project/contracts/IAuditorEnrollments.sol\":{\"keccak256\":\"0x31dc12215c4465ec295f4781ba43bfa2d15b331252dc73467e469c0049b4aaa9\",\"license\":\"MIT OR Apache-2.0\",\"urls\":[\"bzz-raw://d0d3a4b92f7bd099c3bede39f4194f76ec17baaae4f5fde78362496e226d7ce3\",\"dweb:/ipfs/QmdM7rS1QB7gokxuhTBPk7spRz21MV6JBYbQEnNXEyi17W\"]}},\"version\":1}",
+                "storageLayout": {
+                    "storage": [],
+                    "types": null
+                },
+                "userdoc": {
+                    "kind": "user",
+                    "methods": {
+                        "addAuditor(uint256,address)": {
+                            "notice": "Adds an auditor to the enrolled auditors list"
+                        },
+                        "getAuditEnrollment(uint256)": {
+                            "notice": "Returns and auditor enrollment struct data for a give auditId"
+                        },
+                        "insertAuditEnrollment(uint256,address[])": {
+                            "notice": "Adds a set of auditors enrolled to a given audit item"
+                        },
+                        "isAuditEnrolled(uint256)": {
+                            "notice": "Finds if the system has enrollments registered for the audit item"
+                        },
+                        "updateauditors(uint256,address[])": {
+                            "notice": "Updates the whole list of auditors enrolled to an auditId"
+                        }
+                    },
+                    "version": 1
+                }
+            }
+        }
+    },
+    "sources": {
+        "/Users/enriquerafaeldangelo/consensys/blockchain-developer-bootcamp-final-project/contracts/IAuditorEnrollments.sol": {
+            "ast": {
+                "absolutePath": "/Users/enriquerafaeldangelo/consensys/blockchain-developer-bootcamp-final-project/contracts/IAuditorEnrollments.sol",
+                "exportedSymbols": {
+                    "IAuditEnrollments": [
+                        58
+                    ]
+                },
+                "id": 59,
+                "license": "MIT OR Apache-2.0",
+                "nodeType": "SourceUnit",
+                "nodes": [
+                    {
+                        "id": 1,
+                        "literals": [
+                            "solidity",
+                            "^",
+                            "0.8",
+                            ".3"
+                        ],
+                        "nodeType": "PragmaDirective",
+                        "src": "46:23:0"
+                    },
+                    {
+                        "abstract": false,
+                        "baseContracts": [],
+                        "canonicalName": "IAuditEnrollments",
+                        "contractDependencies": [],
+                        "contractKind": "interface",
+                        "documentation": {
+                            "id": 2,
+                            "nodeType": "StructuredDocumentation",
+                            "src": "71:73:0",
+                            "text": "@title Auditor Enrollments Interface\n @author Enrique R. D'Angelo"
+                        },
+                        "fullyImplemented": false,
+                        "id": 58,
+                        "linearizedBaseContracts": [
+                            58
+                        ],
+                        "name": "IAuditEnrollments",
+                        "nameLocation": "154:17:0",
+                        "nodeType": "ContractDefinition",
+                        "nodes": [
+                            {
+                                "canonicalName": "IAuditEnrollments.AuditEnrollmentData",
+                                "id": 10,
+                                "members": [
+                                    {
+                                        "constant": false,
+                                        "id": 5,
+                                        "mutability": "mutable",
+                                        "name": "auditors",
+                                        "nameLocation": "407:8:0",
+                                        "nodeType": "VariableDeclaration",
+                                        "scope": 10,
+                                        "src": "397:18:0",
+                                        "stateVariable": false,
+                                        "storageLocation": "default",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                                            "typeString": "address[]"
+                                        },
+                                        "typeName": {
+                                            "baseType": {
+                                                "id": 3,
+                                                "name": "address",
+                                                "nodeType": "ElementaryTypeName",
+                                                "src": "397:7:0",
+                                                "stateMutability": "nonpayable",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_address",
+                                                    "typeString": "address"
+                                                }
+                                            },
+                                            "id": 4,
+                                            "nodeType": "ArrayTypeName",
+                                            "src": "397:9:0",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                                                "typeString": "address[]"
+                                            }
+                                        },
+                                        "visibility": "internal"
+                                    },
+                                    {
+                                        "constant": false,
+                                        "id": 7,
+                                        "mutability": "mutable",
+                                        "name": "auditId",
+                                        "nameLocation": "426:7:0",
+                                        "nodeType": "VariableDeclaration",
+                                        "scope": 10,
+                                        "src": "421:12:0",
+                                        "stateVariable": false,
+                                        "storageLocation": "default",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_uint256",
+                                            "typeString": "uint256"
+                                        },
+                                        "typeName": {
+                                            "id": 6,
+                                            "name": "uint",
+                                            "nodeType": "ElementaryTypeName",
+                                            "src": "421:4:0",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_uint256",
+                                                "typeString": "uint256"
+                                            }
+                                        },
+                                        "visibility": "internal"
+                                    },
+                                    {
+                                        "constant": false,
+                                        "id": 9,
+                                        "mutability": "mutable",
+                                        "name": "index",
+                                        "nameLocation": "444:5:0",
+                                        "nodeType": "VariableDeclaration",
+                                        "scope": 10,
+                                        "src": "439:10:0",
+                                        "stateVariable": false,
+                                        "storageLocation": "default",
+                                        "typeDescriptions": {
+                                            "typeIdentifier": "t_uint256",
+                                            "typeString": "uint256"
+                                        },
+                                        "typeName": {
+                                            "id": 8,
+                                            "name": "uint",
+                                            "nodeType": "ElementaryTypeName",
+                                            "src": "439:4:0",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_uint256",
+                                                "typeString": "uint256"
+                                            }
+                                        },
+                                        "visibility": "internal"
+                                    }
+                                ],
+                                "name": "AuditEnrollmentData",
+                                "nameLocation": "371:19:0",
+                                "nodeType": "StructDefinition",
+                                "scope": 58,
+                                "src": "364:90:0",
+                                "visibility": "public"
+                            },
+                            {
+                                "documentation": {
+                                    "id": 11,
+                                    "nodeType": "StructuredDocumentation",
+                                    "src": "457:339:0",
+                                    "text": "@notice Finds if the system has enrollments registered for the audit item\n @dev Used to check as required for certain functions assuming there is and enrollment struct already in place\n @param auditId functional key of the audit Item tokenId = auditId\n @return true if the audit has enrollments, otherwise returns false "
+                                },
+                                "functionSelector": "3351f910",
+                                "id": 18,
+                                "implemented": false,
+                                "kind": "function",
+                                "modifiers": [],
+                                "name": "isAuditEnrolled",
+                                "nameLocation": "808:15:0",
+                                "nodeType": "FunctionDefinition",
+                                "parameters": {
+                                    "id": 14,
+                                    "nodeType": "ParameterList",
+                                    "parameters": [
+                                        {
+                                            "constant": false,
+                                            "id": 13,
+                                            "mutability": "mutable",
+                                            "name": "auditId",
+                                            "nameLocation": "829:7:0",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 18,
+                                            "src": "824:12:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "default",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_uint256",
+                                                "typeString": "uint256"
+                                            },
+                                            "typeName": {
+                                                "id": 12,
+                                                "name": "uint",
+                                                "nodeType": "ElementaryTypeName",
+                                                "src": "824:4:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_uint256",
+                                                    "typeString": "uint256"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        }
+                                    ],
+                                    "src": "823:14:0"
+                                },
+                                "returnParameters": {
+                                    "id": 17,
+                                    "nodeType": "ParameterList",
+                                    "parameters": [
+                                        {
+                                            "constant": false,
+                                            "id": 16,
+                                            "mutability": "mutable",
+                                            "name": "",
+                                            "nameLocation": "-1:-1:-1",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 18,
+                                            "src": "860:4:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "default",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_bool",
+                                                "typeString": "bool"
+                                            },
+                                            "typeName": {
+                                                "id": 15,
+                                                "name": "bool",
+                                                "nodeType": "ElementaryTypeName",
+                                                "src": "860:4:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_bool",
+                                                    "typeString": "bool"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        }
+                                    ],
+                                    "src": "859:6:0"
+                                },
+                                "scope": 58,
+                                "src": "799:68:0",
+                                "stateMutability": "view",
+                                "virtual": false,
+                                "visibility": "external"
+                            },
+                            {
+                                "documentation": {
+                                    "id": 19,
+                                    "nodeType": "StructuredDocumentation",
+                                    "src": "873:204:0",
+                                    "text": "@notice Adds a set of auditors enrolled to a given audit item\n @param auditId functional key of the audit Item tokenId = auditId\n @param auditors array of auditors enrolled to the audit item"
+                                },
+                                "functionSelector": "0e601b4f",
+                                "id": 27,
+                                "implemented": false,
+                                "kind": "function",
+                                "modifiers": [],
+                                "name": "insertAuditEnrollment",
+                                "nameLocation": "1089:21:0",
+                                "nodeType": "FunctionDefinition",
+                                "parameters": {
+                                    "id": 25,
+                                    "nodeType": "ParameterList",
+                                    "parameters": [
+                                        {
+                                            "constant": false,
+                                            "id": 21,
+                                            "mutability": "mutable",
+                                            "name": "auditId",
+                                            "nameLocation": "1116:7:0",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 27,
+                                            "src": "1111:12:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "default",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_uint256",
+                                                "typeString": "uint256"
+                                            },
+                                            "typeName": {
+                                                "id": 20,
+                                                "name": "uint",
+                                                "nodeType": "ElementaryTypeName",
+                                                "src": "1111:4:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_uint256",
+                                                    "typeString": "uint256"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        },
+                                        {
+                                            "constant": false,
+                                            "id": 24,
+                                            "mutability": "mutable",
+                                            "name": "auditors",
+                                            "nameLocation": "1142:8:0",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 27,
+                                            "src": "1125:25:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "memory",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_array$_t_address_$dyn_memory_ptr",
+                                                "typeString": "address[]"
+                                            },
+                                            "typeName": {
+                                                "baseType": {
+                                                    "id": 22,
+                                                    "name": "address",
+                                                    "nodeType": "ElementaryTypeName",
+                                                    "src": "1125:7:0",
+                                                    "stateMutability": "nonpayable",
+                                                    "typeDescriptions": {
+                                                        "typeIdentifier": "t_address",
+                                                        "typeString": "address"
+                                                    }
+                                                },
+                                                "id": 23,
+                                                "nodeType": "ArrayTypeName",
+                                                "src": "1125:9:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                                                    "typeString": "address[]"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        }
+                                    ],
+                                    "src": "1110:42:0"
+                                },
+                                "returnParameters": {
+                                    "id": 26,
+                                    "nodeType": "ParameterList",
+                                    "parameters": [],
+                                    "src": "1162:0:0"
+                                },
+                                "scope": 58,
+                                "src": "1080:83:0",
+                                "stateMutability": "nonpayable",
+                                "virtual": false,
+                                "visibility": "external"
+                            },
+                            {
+                                "documentation": {
+                                    "id": 28,
+                                    "nodeType": "StructuredDocumentation",
+                                    "src": "1169:145:0",
+                                    "text": "@notice Returns and auditor enrollment struct data for a give auditId\n @param auditId functional key of the audit Item tokenId = auditId"
+                                },
+                                "functionSelector": "b9e309c1",
+                                "id": 36,
+                                "implemented": false,
+                                "kind": "function",
+                                "modifiers": [],
+                                "name": "getAuditEnrollment",
+                                "nameLocation": "1326:18:0",
+                                "nodeType": "FunctionDefinition",
+                                "parameters": {
+                                    "id": 31,
+                                    "nodeType": "ParameterList",
+                                    "parameters": [
+                                        {
+                                            "constant": false,
+                                            "id": 30,
+                                            "mutability": "mutable",
+                                            "name": "auditId",
+                                            "nameLocation": "1350:7:0",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 36,
+                                            "src": "1345:12:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "default",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_uint256",
+                                                "typeString": "uint256"
+                                            },
+                                            "typeName": {
+                                                "id": 29,
+                                                "name": "uint",
+                                                "nodeType": "ElementaryTypeName",
+                                                "src": "1345:4:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_uint256",
+                                                    "typeString": "uint256"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        }
+                                    ],
+                                    "src": "1344:14:0"
+                                },
+                                "returnParameters": {
+                                    "id": 35,
+                                    "nodeType": "ParameterList",
+                                    "parameters": [
+                                        {
+                                            "constant": false,
+                                            "id": 34,
+                                            "mutability": "mutable",
+                                            "name": "",
+                                            "nameLocation": "-1:-1:-1",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 36,
+                                            "src": "1382:26:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "memory",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_struct$_AuditEnrollmentData_$10_memory_ptr",
+                                                "typeString": "struct IAuditEnrollments.AuditEnrollmentData"
+                                            },
+                                            "typeName": {
+                                                "id": 33,
+                                                "nodeType": "UserDefinedTypeName",
+                                                "pathNode": {
+                                                    "id": 32,
+                                                    "name": "AuditEnrollmentData",
+                                                    "nodeType": "IdentifierPath",
+                                                    "referencedDeclaration": 10,
+                                                    "src": "1382:19:0"
+                                                },
+                                                "referencedDeclaration": 10,
+                                                "src": "1382:19:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_struct$_AuditEnrollmentData_$10_storage_ptr",
+                                                    "typeString": "struct IAuditEnrollments.AuditEnrollmentData"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        }
+                                    ],
+                                    "src": "1381:28:0"
+                                },
+                                "scope": 58,
+                                "src": "1317:93:0",
+                                "stateMutability": "view",
+                                "virtual": false,
+                                "visibility": "external"
+                            },
+                            {
+                                "documentation": {
+                                    "id": 37,
+                                    "nodeType": "StructuredDocumentation",
+                                    "src": "1416:245:0",
+                                    "text": "@notice Updates the whole list of auditors enrolled to an auditId\n @param auditId functional key of the audit Item tokenId = auditId\n @return success true the systme was able to update the audit enrollments, otherwise returns false"
+                                },
+                                "functionSelector": "86ed4106",
+                                "id": 47,
+                                "implemented": false,
+                                "kind": "function",
+                                "modifiers": [],
+                                "name": "updateauditors",
+                                "nameLocation": "1673:14:0",
+                                "nodeType": "FunctionDefinition",
+                                "parameters": {
+                                    "id": 43,
+                                    "nodeType": "ParameterList",
+                                    "parameters": [
+                                        {
+                                            "constant": false,
+                                            "id": 39,
+                                            "mutability": "mutable",
+                                            "name": "auditId",
+                                            "nameLocation": "1693:7:0",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 47,
+                                            "src": "1688:12:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "default",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_uint256",
+                                                "typeString": "uint256"
+                                            },
+                                            "typeName": {
+                                                "id": 38,
+                                                "name": "uint",
+                                                "nodeType": "ElementaryTypeName",
+                                                "src": "1688:4:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_uint256",
+                                                    "typeString": "uint256"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        },
+                                        {
+                                            "constant": false,
+                                            "id": 42,
+                                            "mutability": "mutable",
+                                            "name": "auditors",
+                                            "nameLocation": "1719:8:0",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 47,
+                                            "src": "1702:25:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "memory",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_array$_t_address_$dyn_memory_ptr",
+                                                "typeString": "address[]"
+                                            },
+                                            "typeName": {
+                                                "baseType": {
+                                                    "id": 40,
+                                                    "name": "address",
+                                                    "nodeType": "ElementaryTypeName",
+                                                    "src": "1702:7:0",
+                                                    "stateMutability": "nonpayable",
+                                                    "typeDescriptions": {
+                                                        "typeIdentifier": "t_address",
+                                                        "typeString": "address"
+                                                    }
+                                                },
+                                                "id": 41,
+                                                "nodeType": "ArrayTypeName",
+                                                "src": "1702:9:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                                                    "typeString": "address[]"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        }
+                                    ],
+                                    "src": "1687:41:0"
+                                },
+                                "returnParameters": {
+                                    "id": 46,
+                                    "nodeType": "ParameterList",
+                                    "parameters": [
+                                        {
+                                            "constant": false,
+                                            "id": 45,
+                                            "mutability": "mutable",
+                                            "name": "success",
+                                            "nameLocation": "1751:7:0",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 47,
+                                            "src": "1746:12:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "default",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_bool",
+                                                "typeString": "bool"
+                                            },
+                                            "typeName": {
+                                                "id": 44,
+                                                "name": "bool",
+                                                "nodeType": "ElementaryTypeName",
+                                                "src": "1746:4:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_bool",
+                                                    "typeString": "bool"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        }
+                                    ],
+                                    "src": "1745:14:0"
+                                },
+                                "scope": 58,
+                                "src": "1664:96:0",
+                                "stateMutability": "nonpayable",
+                                "virtual": false,
+                                "visibility": "external"
+                            },
+                            {
+                                "documentation": {
+                                    "id": 48,
+                                    "nodeType": "StructuredDocumentation",
+                                    "src": "1764:328:0",
+                                    "text": "@notice Adds an auditor to the enrolled auditors list\n @param auditId functional key of the audit Item tokenId = auditId\n @param auditor address of the auditor being added to the audit enrollments  \n @return success true the systme was able to add the auditor to the audit enrollments, otherwise returns false"
+                                },
+                                "functionSelector": "afa6255e",
+                                "id": 57,
+                                "implemented": false,
+                                "kind": "function",
+                                "modifiers": [],
+                                "name": "addAuditor",
+                                "nameLocation": "2104:10:0",
+                                "nodeType": "FunctionDefinition",
+                                "parameters": {
+                                    "id": 53,
+                                    "nodeType": "ParameterList",
+                                    "parameters": [
+                                        {
+                                            "constant": false,
+                                            "id": 50,
+                                            "mutability": "mutable",
+                                            "name": "auditId",
+                                            "nameLocation": "2120:7:0",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 57,
+                                            "src": "2115:12:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "default",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_uint256",
+                                                "typeString": "uint256"
+                                            },
+                                            "typeName": {
+                                                "id": 49,
+                                                "name": "uint",
+                                                "nodeType": "ElementaryTypeName",
+                                                "src": "2115:4:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_uint256",
+                                                    "typeString": "uint256"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        },
+                                        {
+                                            "constant": false,
+                                            "id": 52,
+                                            "mutability": "mutable",
+                                            "name": "auditor",
+                                            "nameLocation": "2137:7:0",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 57,
+                                            "src": "2129:15:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "default",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_address",
+                                                "typeString": "address"
+                                            },
+                                            "typeName": {
+                                                "id": 51,
+                                                "name": "address",
+                                                "nodeType": "ElementaryTypeName",
+                                                "src": "2129:7:0",
+                                                "stateMutability": "nonpayable",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_address",
+                                                    "typeString": "address"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        }
+                                    ],
+                                    "src": "2114:31:0"
+                                },
+                                "returnParameters": {
+                                    "id": 56,
+                                    "nodeType": "ParameterList",
+                                    "parameters": [
+                                        {
+                                            "constant": false,
+                                            "id": 55,
+                                            "mutability": "mutable",
+                                            "name": "success",
+                                            "nameLocation": "2168:7:0",
+                                            "nodeType": "VariableDeclaration",
+                                            "scope": 57,
+                                            "src": "2163:12:0",
+                                            "stateVariable": false,
+                                            "storageLocation": "default",
+                                            "typeDescriptions": {
+                                                "typeIdentifier": "t_bool",
+                                                "typeString": "bool"
+                                            },
+                                            "typeName": {
+                                                "id": 54,
+                                                "name": "bool",
+                                                "nodeType": "ElementaryTypeName",
+                                                "src": "2163:4:0",
+                                                "typeDescriptions": {
+                                                    "typeIdentifier": "t_bool",
+                                                    "typeString": "bool"
+                                                }
+                                            },
+                                            "visibility": "internal"
+                                        }
+                                    ],
+                                    "src": "2162:14:0"
+                                },
+                                "scope": 58,
+                                "src": "2095:83:0",
+                                "stateMutability": "nonpayable",
+                                "virtual": false,
+                                "visibility": "external"
+                            }
+                        ],
+                        "scope": 59,
+                        "src": "144:2040:0",
+                        "usedErrors": []
+                    }
+                ],
+                "src": "46:2139:0"
+            },
+            "id": 0
+        }
+    }
+}

@@ -43,6 +43,6 @@ typechain
 
 #Hardhat files
 cache
-artifacts
-
-bin/contracts
+artifacts/@openzeppelin   
+artifacts/build-info
+artifacts/hardhat
