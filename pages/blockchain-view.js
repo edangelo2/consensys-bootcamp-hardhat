@@ -326,7 +326,7 @@ export default function Home() {
                                           {
                                             AAssignments.auditors.map((auditorAddr)=>{
                                             return (
-                                              <p className="text-xs font-thin text-black-900">{auditorAddr}</p>
+                                              <p key={auditorAddr} className="text-xs font-thin text-black-900">{auditorAddr}</p>
                                               )
                                               })
                                           }
