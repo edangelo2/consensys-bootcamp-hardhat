@@ -339,9 +339,9 @@ export default function Home() {
                                       <div className="ml-4">
                                       <div className="text-sm font-medium text-gray-900">
                                           {
-                                            AAssignments.auditorFees.map((AFee)=>{
+                                            AAssignments.auditorFees.map((AFee,i)=>{
                                             return (
-                                              <p className="text-xs font-thin text-black-900">{ethers.utils.formatUnits(AFee.toString(), 'ether')}</p>
+                                              <p key={i} className="text-xs font-thin text-black-900">{ethers.utils.formatUnits(AFee.toString(), 'ether')}</p>
                                               )
                                               })
                                           }
@@ -354,9 +354,9 @@ export default function Home() {
                                       <div className="ml-4">
                                         <div className="text-sm font-medium text-gray-900">
                                           {
-                                             AAssignments.auditorFeePaid.map((auditorFP)=>{
+                                             AAssignments.auditorFeePaid.map((auditorFP,i)=>{
                                             return (
-                                              <p className="text-xs font-thin text-black-900">{auditorFP ? 'Paid': 'Pending'}</p>
+                                              <p key={i} className="text-xs font-thin text-black-900">{auditorFP ? 'Paid': 'Pending'}</p>
                                               )
                                               })
                                           }
@@ -369,9 +369,9 @@ export default function Home() {
                                   <div className="ml-4">
                                     <div className="text-sm font-medium text-gray-900">
                                           {
-                                            AAssignments.auditResultIds.map((auditRId)=>{
+                                            AAssignments.auditResultIds.map((auditRId,i)=>{
                                             return (
-                                              <p className="text-xs font-thin text-black-900">{auditRId.toString()}</p>
+                                              <p key={i} className="text-xs font-thin text-black-900">{auditRId.toString()}</p>
                                               )
                                               })
                                           }
