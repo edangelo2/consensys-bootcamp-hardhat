@@ -385,9 +385,9 @@ export default function Home() {
                                     <div className="text-sm font-medium text-gray-900">
                   
                                           {
-                                            AAssignments.auditorResults.map((auditR)=>{
+                                            AAssignments.auditorResults.map((auditR,i)=>{
                                             return (
-                                              <p className="text-xs font-thin text-black-900">{auditR ? 'Passed': 'Failed'}</p>
+                                              <p key={i} className="text-xs font-thin text-black-900">{auditR ? 'Passed': 'Failed'}</p>
                                               )
                                               })
                                           }

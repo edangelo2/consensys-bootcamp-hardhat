@@ -153,17 +153,17 @@ useEffect(() => {
                 <p className="text-base font-mono font-bold text-white">Producer  : {AItem.producer}</p>
                 <p className="text-base font-mono font-bold text-white">Auditors Enrolled  : </p>
                   {
-                  EnrollAddr.map((auditorAddr)=>{
+                  EnrollAddr.map((auditorAddr,i)=>{
                   return (
-                    <p className="text-base font-mono font-bold text-white">{auditorAddr}</p>
+                    <p key={i} className="text-base font-mono font-bold text-white">{auditorAddr}</p>
                     )
                     })
                   }
                 <p className="text-base font-mono font-bold text-white">Auditors Assigned  : </p>
                   {
-                  AssignAddr.map((auditorAddr)=>{
+                  AssignAddr.map((auditorAddr, i)=>{
                   return (
-                    <p className="text-base font-mono font-bold text-white">{auditorAddr}</p>
+                    <p key={i} className="text-base font-mono font-bold text-white">{auditorAddr}</p>
                     )
                     })
                   }
