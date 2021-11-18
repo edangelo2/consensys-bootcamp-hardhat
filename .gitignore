@@ -4,7 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-!/artifacts/contracts/AuditItem.sol/AuditItem.json
+
 
 # testing
 /coverage
@@ -44,3 +44,5 @@ typechain
 #Hardhat files
 cache
 artifacts
+
+bin/contracts
