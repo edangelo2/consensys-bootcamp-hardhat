@@ -483,7 +483,8 @@ contract DAudit is ReentrancyGuard {
         else
             idToAuditItemData[auditId].auditItemStatus = AuditItemStatus.Failed;
     }
-    /// @notice Returns only items that are associated to the producer */
+    
+    /// @notice Returns only items that are associated to the producer 
     function fetchMyAudits() public view returns (AuditItemData[] memory) {
         uint totalItemCount = _itemIds.current();
         uint itemCount = 0;
