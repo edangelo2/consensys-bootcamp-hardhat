@@ -55,8 +55,19 @@ The auditors and producers information is kept hidden through all the process th
 
 **Auditors:** Citizens that can review tax statements
 
-**Audit Results:** Documents with the results of evaluating tha the tax statement is correct and the observations
+**Audit Results:** Documents with the results of evaluating the tax statement is correct and the observations
 
 **Community Members** People in general
 
+### Example 2 - Puchase Process
+
+**Auditable Item:** Purchase Order
+
+**Producers:** Goverment Entity Purchase Department
+
+**Auditors:** Citizens that can review purchase orders processes
+
+**Audit Results:** Documents with the results of evaluating that the steps of processing the purchase orders was correct
+
+**Community Members** People in general
   
