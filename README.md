@@ -1,4 +1,4 @@
-# blockchain-developer-bootcamp-final-project
+# Final Project Functional Description
 ## Decentralized Audits
 
 A distributed system for auditing things that require human interaction and manual processes in the process of auditing.
@@ -70,4 +70,25 @@ The auditors and producers information is kept hidden through all the process th
 **Audit Results:** Documents with the results of evaluating that the steps of processing the purchase orders was correct
 
 **Community Members** People in general
-  
+
+# Project Technical Details and Sumbmission requirements
+
+## Ethereum account to receive your certification as an NFT
+0x745E9390F6Fdcc932AB5b41850aB94C87f224974
+
+## Dapp Site URL
+The Dapp is hosted in Netifly in the following URL: https://quirky-leavitt-985d0f.netlify.app
+
+## Smart Contracts Deployments
+
+The smart contracts are deployed in the Ropsten Network in the following addresses:
+
+auditEnrollments = "0x7364B83Df2FB101b69c2137790411Cb5e011262d"
+auditAssignments = "0xf5426Bf7cbE8F19E8390F68bb4D033d45e012855"
+DAuditaddress = "0x5344ef29Ac1875A9BbbcD70B21dDeF7403EcacfD"
+auditItemAddress = "0x6345423b2869ed0367D60078930c45E91cb9013D"
+auditResultAddress = "0x98BcDAe1fE42ee106DF1A6aa4221363928a86aE2"
+
+Note: This can be set up in the config.js file for running locally the Dapp against the deplyed contracts if required.
+
+

@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
-pragma solidity ^0.8.3;
+pragma solidity 0.8.3;
 
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
@@ -463,11 +463,20 @@ contract DAudit is ReentrancyGuard {
             "All the Audit results must be the same for paying the auditors"
         );
 
+        // Update the AuditItem Status
+        if(resultFinal)
+            idToAuditItemData[auditId].auditItemStatus = AuditItemStatus.Passed;
+        else
+            idToAuditItemData[auditId].auditItemStatus = AuditItemStatus.Failed;
+
+
         // Calculate Audit Fee for each auditor
         uint256 auditFeeAuditor = auditFee.div(auditors.length);
         console.log(auditFeeAuditor);
         for (uint256 i = 0; i < auditors.length; i++) {
-            payable(auditors[i]).transfer(auditFeeAuditor); 
+            //payable(auditors[i]).transfer(auditFeeAuditor); replaced by call
+            (bool success, ) = payable(auditors[i]).call{value:auditFeeAuditor}("");
+            require(success, "Transfer failed.");
             auditorFees[i] = auditFeeAuditor;
             auditorFeePaid[i] = true;
         }
@@ -477,11 +486,6 @@ contract DAudit is ReentrancyGuard {
             auditorFeePaid
         );
 
-        // Update the AuditItem Status
-        if(resultFinal)
-            idToAuditItemData[auditId].auditItemStatus = AuditItemStatus.Passed;
-        else
-            idToAuditItemData[auditId].auditItemStatus = AuditItemStatus.Failed;
     }
     
     /// @notice Returns only items that are associated to the producer 

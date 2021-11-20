@@ -1,0 +1,8 @@
+The smart contracts are deployed in the Ropsten Network in the following addresses:
+
+auditEnrollments = "0x7364B83Df2FB101b69c2137790411Cb5e011262d"
+auditAssignments = "0xf5426Bf7cbE8F19E8390F68bb4D033d45e012855"
+DAuditaddress = "0x5344ef29Ac1875A9BbbcD70B21dDeF7403EcacfD"
+auditItemAddress = "0x6345423b2869ed0367D60078930c45E91cb9013D"
+auditResultAddress = "0x98BcDAe1fE42ee106DF1A6aa4221363928a86aE2"
+
