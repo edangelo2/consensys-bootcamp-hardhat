@@ -26,10 +26,10 @@ import {
   auditItemAddress, DAuditaddress, auditEnrollments, auditAssignments
 } from '../config'
 
-import AuditItem from '../artifacts/contracts/AuditItem.sol/AuditItem.json'
-import DAudit from '../artifacts/contracts/DAudit.sol/DAudit.json'
-import AuditEnrollments from '../artifacts/contracts/AuditorEnrollments.sol/AuditEnrollments.json'
-import AuditorAssignments from '../artifacts/contracts/AuditorAssignments.sol/AuditAssignments.json'
+import AuditItem from '../contracts-json/AuditItem.json'
+import DAudit from '../contracts-json/DAudit.json'
+import AuditEnrollments from '../contracts-json/AuditEnrollments.json'
+import AuditorAssignments from '../contracts-json/AuditAssignments.json'
 
 import {useRouter}  from 'next/router'
 
@@ -50,7 +50,7 @@ export default function AssignAuditors() {
   async function loadAuditItems() {
 
     //const provider = new ethers.providers.JsonRpcProvider()
-    const provider = new ethers.providers.Web3Provider(web3.currentProvider)
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     const auditItemContract = new ethers.Contract(auditItemAddress, AuditItem.abi, provider)
     const DAuditContract = new ethers.Contract(DAuditaddress, DAudit.abi, provider)
 
@@ -76,7 +76,7 @@ export default function AssignAuditors() {
       }
     setAItem(item)
     
-    const provider2 = new ethers.providers.JsonRpcProvider()
+    const provider2 = new ethers.providers.Web3Provider(window.ethereum);
     const contract2 = new ethers.Contract(auditEnrollments, AuditEnrollments.abi, provider2)
     const isAuditEnrolled = await contract2.isAuditEnrolled(i.tokenId)
 
@@ -87,7 +87,7 @@ export default function AssignAuditors() {
     }
 
     /* Gets the list of auditors assigned, if any */
-    const provider3 = new ethers.providers.JsonRpcProvider()
+    const provider3 = new ethers.providers.Web3Provider(window.ethereum);
     const contract3 = new ethers.Contract(auditAssignments, AuditorAssignments.abi, provider3)
     const isAuditAssigned = await contract3.isAuditAssigned(i.tokenId)
 

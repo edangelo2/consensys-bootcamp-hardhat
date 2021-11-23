@@ -18,8 +18,8 @@ import {
     auditItemAddress, DAuditaddress
 } from '../config'
 
-import AuditItem from '../artifacts/contracts/AuditItem.sol/AuditItem.json'
-import DAudit from '../artifacts/contracts/DAudit.sol/DAudit.json'
+import AuditItem from '../contracts-json/AuditItem.json'
+import DAudit from '../contracts-json/DAudit.json'
 
 export default function CreateAuditItem() {
   // Variables for loading the files  

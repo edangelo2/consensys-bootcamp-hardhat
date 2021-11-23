@@ -8,8 +8,8 @@ import {
   DAuditaddress, auditItemAddress
 } from '../config'
 
-import DAudit from '../artifacts/contracts/DAudit.sol/DAudit.json'
-import AuditItem from '../artifacts/contracts/AuditItem.sol/AuditItem.json'
+import AuditItem from '../contracts-json/AuditItem.json'
+import DAudit from '../contracts-json/DAudit.json'
 
 
 export default function MyAssets() {

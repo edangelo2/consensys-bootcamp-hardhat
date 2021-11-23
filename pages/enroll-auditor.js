@@ -26,9 +26,10 @@ import {
   auditItemAddress, DAuditaddress, auditEnrollments
 } from '../config'
 
-import AuditItem from '../artifacts/contracts/AuditItem.sol/AuditItem.json'
-import DAudit from '../artifacts/contracts/DAudit.sol/DAudit.json'
-import AuditEnrollments from '../artifacts/contracts/AuditorEnrollments.sol/AuditEnrollments.json'
+import AuditItem from '../contracts-json/AuditItem.json'
+import DAudit from '../contracts-json/DAudit.json'
+import AuditEnrollments from '../contracts-json/AuditEnrollments.json'
+
 import {useRouter}  from 'next/router'
 
 
@@ -46,7 +47,7 @@ export default function EnrollAuditor() {
   async function loadAuditItems() {
 
     //const provider = new ethers.providers.JsonRpcProvider()
-    const provider = new ethers.providers.Web3Provider(web3.currentProvider)
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     const auditItemContract = new ethers.Contract(auditItemAddress, AuditItem.abi, provider)
     const DAuditContract = new ethers.Contract(DAuditaddress, DAudit.abi, provider)
 
@@ -72,7 +73,7 @@ export default function EnrollAuditor() {
       }
     setAItem(item)
     
-    const provider2 = new ethers.providers.JsonRpcProvider()
+    const provider2 = new ethers.providers.Web3Provider(window.ethereum);
     const contract2 = new ethers.Contract(auditEnrollments, AuditEnrollments.abi, provider2)
     const isAuditEnrolled = await contract2.isAuditEnrolled(i.tokenId)
 

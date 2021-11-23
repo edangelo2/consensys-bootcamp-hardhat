@@ -27,8 +27,8 @@ import {
   auditItemAddress, DAuditaddress
 } from '../config'
 
-import AuditItem from '../artifacts/contracts/AuditItem.sol/AuditItem.json'
-import DAudit from '../artifacts/contracts/DAudit.sol/DAudit.json'
+import AuditItem from '../contracts-json/AuditItem.json'
+import DAudit from '../contracts-json/DAudit.json'
 
 export default function Home() {
   const auditItemStatuses = ['Pending','InProgress', 'Passed', 'Failed', 'Cancelled']  
@@ -40,7 +40,8 @@ export default function Home() {
   async function loadAuditItems() {
     /* create a generic provider and query for pending audit items */
     // const provider = new ethers.providers.JsonRpcProvider()
-    const provider = new ethers.providers.Web3Provider(web3.currentProvider)
+    
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     const auditItemContract = new ethers.Contract(auditItemAddress, AuditItem.abi, provider)
     const DAuditContract = new ethers.Contract(DAuditaddress, DAudit.abi, provider)
     const data = await DAuditContract.fetchAudits()

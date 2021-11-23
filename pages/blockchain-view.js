@@ -27,11 +27,10 @@ import {
   auditItemAddress, DAuditaddress, auditEnrollments, auditAssignments
 } from '../config'
 
-import AuditItem from '../artifacts/contracts/AuditItem.sol/AuditItem.json'
-import DAudit from '../artifacts/contracts/DAudit.sol/DAudit.json'
-import AuditEnrollments from '../artifacts/contracts/AuditorEnrollments.sol/AuditEnrollments.json'
-import AuditAssignments from '../artifacts/contracts/AuditorAssignments.sol/AuditAssignments.json'
-import AuditResult from '../artifacts/contracts/AuditResult.sol/AuditResult.json'
+import AuditItem from '../contracts-json/AuditItem.json'
+import DAudit from '../contracts-json/DAudit.json'
+import AuditEnrollments from '../contracts-json/AuditEnrollments.json'
+import AuditAssignments from '../contracts-json/AuditAssignments.json'
 
 export default function Home() {
   const auditItemStatuses = ['Pending','In Progress', 'Passed', 'Failed', 'Cancelled']  
@@ -49,7 +48,7 @@ export default function Home() {
   async function loadAuditItems() {
     /* create a generic provider and query for pending audit items */
     //const provider = new ethers.providers.JsonRpcProvider()
-    const provider = new ethers.providers.Web3Provider(web3.currentProvider)
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
     const auditItemContract = new ethers.Contract(auditItemAddress, AuditItem.abi, provider)
     const DAuditContract = new ethers.Contract(DAuditaddress, DAudit.abi, provider)
     const data = await DAuditContract.fetchAudits()
@@ -78,7 +77,7 @@ export default function Home() {
     setAuditItems(items)
 
 
-    const provider2 = new ethers.providers.JsonRpcProvider()
+    const provider2 = new ethers.providers.Web3Provider(window.ethereum);
     const contract2 = new ethers.Contract(auditEnrollments, AuditEnrollments.abi, provider2)
     let enrollmentData = await contract2.fetchAuditEnrollments()
     
@@ -98,7 +97,7 @@ export default function Home() {
     setAuditorEnrollments(enrollments)
     console.log(enrollments)
 
-    const provider3 = new ethers.providers.JsonRpcProvider()
+    const provider3 = new ethers.providers.Web3Provider(window.ethereum);
     const contract3 = new ethers.Contract(auditAssignments, AuditAssignments.abi, provider3)
     let assignmentData = await contract3.fetchAuditAssignments()
 
@@ -215,7 +214,7 @@ export default function Home() {
         </div>
     </div>
 
-    <div className="px-1 py-1 text-left text-xxl font-medium text-gray-500 uppercase tracking-wider">AUDIT ENRROLMENTS</div>
+    <div className="px-1 py-1 text-left text-xxl font-medium text-gray-500 uppercase tracking-wider">AUDIT ENROLMENTS</div>
     <div className="-my-2 overflow-x-auto sm:-mx-8 lg:-mx-8 ">
       <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
         <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
